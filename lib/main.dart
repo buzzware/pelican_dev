@@ -78,19 +78,27 @@ class HenryRouterDelegate extends RouterDelegate<HenryRoute> with ChangeNotifier
     }
   }
 
+  _buildPage(String key, Widget widget) {
+    return MaterialPage(
+      key: ValueKey(key),
+      child: widget
+    );
+  }
+
   _buildPages() {
     return [
-      MaterialPage(
-        key: const ValueKey('BooksListPage'),
-        child: BooksListScreen(
-          books: books,
-          onTapped: (book) {
-            _selectedBook = book;
-            notifyListeners();
-          },
-        ),
+      _buildPage(
+          'BooksListPage',
+          BooksListScreen(
+            books: books,
+            onTapped: (book) {
+              _selectedBook = book;
+              notifyListeners();
+            },
+          )
       ),
-      if (_selectedBook != null) BookDetailsPage(book: _selectedBook)
+      if (_selectedBook != null)
+        BookDetailsPage(book: _selectedBook)
     ];
   }
 
