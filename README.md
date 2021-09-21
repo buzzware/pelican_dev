@@ -18,3 +18,7 @@ None of the available options met my core requirements, being :
 * a stack of pages, not a history of routes. Back = pop(), or you can goto any route you've stored.
 
 If you've written a popular Flutter routing package, go ahead and steal my ideas. I don't really want to be a package maintainer.
+
+I make no claim of the completeness or quality of this repository, but I intend to use it in production.
+This is not the latest version, but I intend to update it from my production app.
+

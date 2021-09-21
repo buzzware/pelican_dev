@@ -25,7 +25,7 @@ class PelicanRouteSegment {
   }
 
   PelicanRouteSegment.fromPathSegment(String path) {
-    var parts = path.split('&');
+    var parts = path.split('+');
     var nameAndParams = parts[0];
     var optionsStr = parts.length > 1 ? parts[1] : '';
     List<String> nameAndParamsParts = nameAndParams.isNotEmpty ? nameAndParams.split(';') : [];
@@ -63,6 +63,6 @@ class PelicanRouteSegment {
         ops.add([op, options[op]].join('='));
       }
     }
-    return [name_and_pars.join(';'), ops.join(';')].join('&');
+    return [name_and_pars.join(';'), ops.join(';')].where((s) => s.isNotEmpty).join('+');
   }
 }

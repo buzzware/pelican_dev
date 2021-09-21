@@ -33,8 +33,8 @@ class ErrorPage extends StatelessWidget {
 
 // typical url:
 
-// /<stack>/<page>[;[param=value]*]&[option=value]*
-// /main/console&color=red/product;id=5/
+// /<stack>/<page>[;[param=value]*]+[option=value]*
+// /main/console+color=red/product;id=5/
 
 /*
 
@@ -80,7 +80,7 @@ PelicanRouter router = PelicanRouter(
           )
         );
       },
-      'book;id&color;size': (_) async {
+      'book;id+color;size': (_) async {
         print('book');
         return _.page(BookDetailsScreen(book: books.firstWhere((b) => b.id==_.segment!.params['id'])));
       }
