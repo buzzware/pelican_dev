@@ -17,7 +17,12 @@ class PelicanRouterState with ChangeNotifier {
     notifyListeners();
   }
 
-  void push(PelicanRouteSegment segment) {
+  void push(String segmentPath) {
+    var segment = PelicanRouteSegment.fromPathSegment(segmentPath);
+    pushSegment(segment);
+  }
+
+  void pushSegment(PelicanRouteSegment segment) {
     _route.segments.add(segment);
     notifyListeners();
   }
@@ -27,5 +32,4 @@ class PelicanRouterState with ChangeNotifier {
     notifyListeners();
     return poppedItem;
   }
-
 }

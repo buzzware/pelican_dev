@@ -75,7 +75,7 @@ PelicanRouter router = PelicanRouter(
           BooksListScreen(
             books: books,
             onTapped: (book) {
-              router.state.push(PelicanRouteSegment.fromPathSegment("book;id=${book.id}"));
+              router.state.push("book;id=${book.id}");
             }
           )
         );

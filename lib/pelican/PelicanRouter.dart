@@ -6,9 +6,8 @@ import 'package:pelican_dev/pelican/PelicanRouterState.dart';
 
 class PelicanRouteResult {
   Widget? pageWidget;
-  String? redirectToPath;
 
-  PelicanRouteResult({this.redirectToPath,this.pageWidget});
+  PelicanRouteResult({this.pageWidget});
 }
 
 @immutable
@@ -20,10 +19,6 @@ class PelicanRouteContext {
 
   PelicanRouteResult page(Widget pageWidget) {
     return PelicanRouteResult(pageWidget: pageWidget);
-  }
-
-  PelicanRouteResult redirect(String path) {
-    return PelicanRouteResult(redirectToPath: path);
   }
 }
 
