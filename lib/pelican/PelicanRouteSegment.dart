@@ -2,6 +2,12 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+bool linkedMapsEqual(LinkedHashMap<String, String> map1, LinkedHashMap<String, String> map2) {
+  return map1.length==map2.length && map1.entries.every((e) {
+    return map2.containsKey(e.key) && map2[e.key]==e.value;
+  });
+}
+
 @immutable
 class PelicanRouteSegment {
   late final String name;
@@ -29,7 +35,7 @@ class PelicanRouteSegment {
     var nameAndParams = parts[0];
     var optionsStr = parts.length > 1 ? parts[1] : '';
     List<String> nameAndParamsParts = nameAndParams.isNotEmpty ? nameAndParams.split(';') : [];
-    name = nameAndParamsParts.removeAt(0);
+    name = nameAndParamsParts.isNotEmpty ? nameAndParamsParts.removeAt(0) : '';
     params = mapFromValues(nameAndParamsParts.join(';'));
     options = mapFromValues(optionsStr);
   }
@@ -65,4 +71,9 @@ class PelicanRouteSegment {
     }
     return [name_and_pars.join(';'), ops.join(';')].where((s) => s.isNotEmpty).join('+');
   }
+
+  bool equals(PelicanRouteSegment other) {
+    return name == other.name && linkedMapsEqual(params,other.params);
+  }
 }
+

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pelican_dev/TransitionDelegate.dart';
 import 'package:pelican_dev/pelican/PelicanRoute.dart';
@@ -89,6 +90,16 @@ class RouteTable {
       }
     } while (true);
   }
+
+  Future<PelicanRoute> executeRedirectsRoute(PelicanRoute route) async {
+    var path = route.toPath();
+    var redirected = await executeRedirects(path);
+    if (redirected == path)
+      return route;
+    else
+      return PelicanRoute.fromPath(redirected);
+  }
+
 }
 
 class PelicanRouteParser extends RouteInformationParser<PelicanRouterState> {
@@ -99,7 +110,7 @@ class PelicanRouteParser extends RouteInformationParser<PelicanRouterState> {
   // RouteInformation -> PelicanRoute
   @override
   Future<PelicanRouterState> parseRouteInformation(RouteInformation routeInformation) async {
-    print('parseRouteInformation RouteInformation -> PelicanRoute');
+    print('parseRouteInformation RouteInformation ${routeInformation.location} -> PelicanRoute');
     var path = await router.routeTable.executeRedirects(routeInformation.location!);
     var route = PelicanRoute.fromPath(path);
     return PelicanRouterState(
@@ -110,9 +121,10 @@ class PelicanRouteParser extends RouteInformationParser<PelicanRouterState> {
   // PelicanRoute -> RouteInformation
   @override
   RouteInformation? restoreRouteInformation(PelicanRouterState configuration) {
-    print('restoreRouteInformation PelicanRoute -> RouteInformation');
+    var location = configuration.route.toPath();
+    print('restoreRouteInformation PelicanRoute ${location} -> RouteInformation');
     return RouteInformation(
-      location: configuration.route.toPath(),
+      location: location,
     );
   }
 }
@@ -126,6 +138,9 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
 
   @override
   late final GlobalKey<NavigatorState> navigatorKey;
+
+  List<Page>? _cachePages;
+  PelicanRoute? _cacheRoute;
 
   PelicanRouter(
       String initialPath,
@@ -151,7 +166,24 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
   }
 
   @override
+  Future<void> setRestoredRoutePath(PelicanRouterState configuration) {
+    return setNewRoutePath(configuration);
+  }
+
+
+  @override
+  Future<void> setInitialRoutePath(PelicanRouterState configuration) async {
+    var newRoute = await routeTable.executeRedirectsRoute(configuration.route);
+    if (!newRoute.equals(configuration.route)) {
+      configuration.route = newRoute;
+      await setNewRoutePath(configuration);
+    }
+  }
+
+  @override
   Future<void> setNewRoutePath(PelicanRouterState configuration) async {
+    if (configuration.route.equals(state.route))
+      return;
     state.route = configuration.route;
   }
 
@@ -162,14 +194,30 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
     );
   }
 
+
+
   Future<List<Page<dynamic>>> buildPages(BuildContext context) async {
     print('Router.buildPages');
+    print("_pages is ${_cachePages==null ? 'not' : ''} set");
     var pages = List<Page<dynamic>>.empty(growable: true);
-    for (var segment in state.route.segments) {
-      var context = PelicanRouteContext(state.route,segment);
-      var buildResult = await routeTable.executeSegment(context);
-      pages.add(_buildPage(segment.toPathSegment(),buildResult.pageWidget!));
+    var useCached = _cacheRoute!=null;
+    for (var i=0; i<state.route.segments.length; i++) {
+      var segment = state.route.segments[i];
+      Page page;
+      if (useCached && _cacheRoute!.segments.length>i && segment.equals(_cacheRoute!.segments[i])) {
+        page = _cachePages![i];
+        print("Use cached ${_cacheRoute!.segments[i].toPathSegment()}");
+      } else {
+        useCached = false;
+        var context = PelicanRouteContext(state.route, segment);
+        var buildResult = await routeTable.executeSegment(context);
+        print("build ${segment.toPathSegment()}");
+        page = _buildPage(segment.toPathSegment(),buildResult.pageWidget!);
+      }
+      pages.add(page);
     }
+    _cacheRoute = state.route;
+    _cachePages = pages;
     return pages;
   }
 
@@ -184,24 +232,30 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
 
   // build a Navigator
   @override
-  Widget build(BuildContext context) => FutureBuilder(
-    future: buildPages(context),
-    initialData: [
-      MaterialPage(child: Container(child: Text('Please Wait'))),
-    ],
-    builder: (context, snapshot) {
-      if (snapshot.hasError) {
-        return Container(child: Text(snapshot.error.toString()));
-      } else if (snapshot.hasData) {
-        return Navigator(
-          key: navigatorKey,
-          transitionDelegate: NoAnimationTransitionDelegate(),
-          pages: snapshot.data! as List<Page<dynamic>>,
-          onPopPage: _onPopPage
-        );
-      } else {
-        return CircularProgressIndicator();
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: buildPages(context),
+      initialData: [
+        MaterialPage(child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          //child: Text('Please Wait')
+        )),
+      ],
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Container(child: Text(snapshot.error.toString()));
+        } else if (snapshot.hasData) {
+          return Navigator(
+            key: navigatorKey,
+            transitionDelegate: NoAnimationTransitionDelegate(),
+            pages: snapshot.data! as List<Page<dynamic>>,
+            onPopPage: _onPopPage
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
       }
-    }
-  );
+    );
+  }
 }

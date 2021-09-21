@@ -23,12 +23,14 @@ class PelicanRouterState with ChangeNotifier {
   }
 
   void pushSegment(PelicanRouteSegment segment) {
-    _route.segments.add(segment);
-    notifyListeners();
+    route = PelicanRoute(_route.segments + [segment]);
   }
 
   PelicanRouteSegment pop() {
-    final poppedItem = _route.segments.removeLast();
+    if (_route.segments.isEmpty)
+      throw Exception("Can't pop when stack is empty");
+    final poppedItem = _route.segments.last;
+    route = PelicanRoute(_route.segments.sublist(0,_route.segments.length-1));
     print("pop ${poppedItem.toPathSegment()}");
     notifyListeners();
     return poppedItem;
