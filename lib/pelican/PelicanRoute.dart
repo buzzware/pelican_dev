@@ -25,4 +25,17 @@ class PelicanRoute {
   bool equals(PelicanRoute route) {
     return toPath()==route.toPath();
   }
+
+  // returns a new instance with the extra segment
+  PelicanRoute pushSegment(PelicanRouteSegment segment) {
+    return PelicanRoute(segments + [segment]);
+  }
+
+  PelicanRoute popSegment() {
+    if (segments.isEmpty)
+      throw Exception("Can't pop when stack is empty");
+    final poppedItem = segments.last;
+    return PelicanRoute(segments.sublist(0,segments.length-1));
+  }
+
 }
