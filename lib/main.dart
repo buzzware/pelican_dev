@@ -33,7 +33,7 @@ class ErrorPage extends StatelessWidget {
 
 // typical url:
 
-// /<stack>/<page>[;[param=value]*]+[option=value]*
+// /<page>[;[param=value]*]+[option=value]*
 // /main/console+color=red/product;id=5/
 
 /*
@@ -66,7 +66,7 @@ List<Book> books = [
 
 
 PelicanRouter router = PelicanRouter(
-  '/app/books',
+  '/books',
   RouteTable(
     {
       'books': (_) async {
@@ -86,7 +86,7 @@ PelicanRouter router = PelicanRouter(
       }
     },
     redirects: {
-      '/': (_) async => '/app/books'
+      '/': (_) async => '/books'
     }
   ),
 );

@@ -3,13 +3,12 @@ import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
 
 @immutable
 class PelicanRoute {
-  late final String stackName;
   late final List<PelicanRouteSegment> segments;
-  PelicanRoute(this.stackName, this.segments);
+  PelicanRoute(this.segments);
 
   String toPath() {
     var parts = segments.map<String>((s) => s.toPathSegment()).join('/');
-    var result = "/$stackName/$parts";
+    var result = "/$parts";
     return result;
   }
 
@@ -17,7 +16,6 @@ class PelicanRoute {
     var parts = path.split('/');
     if (parts.isNotEmpty && parts[0].isEmpty)
       parts.removeAt(0);
-    stackName = parts.isNotEmpty ? parts.removeAt(0) : '';
     segments = parts.map((p)=>PelicanRouteSegment.fromPathSegment(p)).toList();
   }
 }
