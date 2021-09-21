@@ -31,33 +31,6 @@ class ErrorPage extends StatelessWidget {
   }
 }
 
-// typical url:
-
-// /<page>[;[param=value]*]+[option=value]*
-// /main/console+color=red/product;id=5/
-
-/*
-
-redirects :
-/                         => logged_in ? /auth/logged_in : /public/entrance
-/auth/logged_in           => /app/dashboard
-/app/new_user             => /app/intro
-
-segmentBuilders
-entrance        => Page
-login           => Page
-intro           => Page
-dashboard       => Page
-settings        => Page
-
-
-'<segment>' (context) => context.page(Page())
-OR
-'<full_path>' (context) => context.redirect('<relative_or_absolute_path>')
-
- */
-
-
 List<Book> books = [
   Book('1','Stranger in a Strange Land', 'Robert A. Heinlein'),
   Book('2','Foundation', 'Isaac Asimov'),

@@ -29,6 +29,7 @@ class PelicanRouterState with ChangeNotifier {
 
   PelicanRouteSegment pop() {
     final poppedItem = _route.segments.removeLast();
+    print("pop ${poppedItem.toPathSegment()}");
     notifyListeners();
     return poppedItem;
   }
