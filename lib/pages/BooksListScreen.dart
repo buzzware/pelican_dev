@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pigeon_dev/main.dart';
-import 'package:pigeon_dev/models/Book.dart';
+import 'package:pelican_dev/main.dart';
+import 'package:pelican_dev/models/Book.dart';
 
 class BooksListScreen extends StatelessWidget {
   final List<Book> books;

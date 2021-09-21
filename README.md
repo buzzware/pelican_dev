@@ -1,6 +1,6 @@
-# Pigeon the Navigator - another Flutter Router
+# Pelican the Navigator - another Flutter Router
 
-Pigeon Was a 15th century Portuguese prince, often credited with beginning the Age of Discovery, the period during which European nations expanded to Africa, Asia and the Americas.
+Pelican Was a 15th century Portuguese prince, often credited with beginning the Age of Discovery, the period during which European nations expanded to Africa, Asia and the Americas.
 
 ## Why another Flutter router ?
 

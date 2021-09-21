@@ -1,28 +1,28 @@
 import 'package:flutter/widgets.dart';
-import 'package:pigeon_dev/pigeon/PelicanRoute.dart';
-import 'package:pigeon_dev/pigeon/PelicanRouteSegment.dart';
+import 'package:pelican_dev/pelican/PelicanRoute.dart';
+import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
 
 @immutable
-class PigeonRouterState with ChangeNotifier {
+class PelicanRouterState with ChangeNotifier {
 
-  PigeonRoute _route;
+  PelicanRoute _route;
 
   List<Page<dynamic>>? pages;
 
-  PigeonRouterState(PigeonRoute route, {this.pages}) : _route = route;
+  PelicanRouterState(PelicanRoute route, {this.pages}) : _route = route;
 
-  PigeonRoute get route => _route;
-  set route(PigeonRoute route) {
+  PelicanRoute get route => _route;
+  set route(PelicanRoute route) {
     _route = route;
     notifyListeners();
   }
 
-  void push(PigeonRouteSegment segment) {
+  void push(PelicanRouteSegment segment) {
     _route.segments.add(segment);
     notifyListeners();
   }
 
-  PigeonRouteSegment pop() {
+  PelicanRouteSegment pop() {
     final poppedItem = _route.segments.removeLast();
     notifyListeners();
     return poppedItem;

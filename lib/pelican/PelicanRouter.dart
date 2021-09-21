@@ -1,64 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:pigeon_dev/TransitionDelegate.dart';
-import 'package:pigeon_dev/pigeon/PelicanRoute.dart';
-import 'package:pigeon_dev/pigeon/PelicanRouteSegment.dart';
-import 'package:pigeon_dev/pigeon/PelicanRouterState.dart';
+import 'package:pelican_dev/TransitionDelegate.dart';
+import 'package:pelican_dev/pelican/PelicanRoute.dart';
+import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
+import 'package:pelican_dev/pelican/PelicanRouterState.dart';
 
-class PigeonRouteResult {
+class PelicanRouteResult {
   Widget? pageWidget;
   String? redirectToPath;
 
-  PigeonRouteResult({this.redirectToPath,this.pageWidget});
+  PelicanRouteResult({this.redirectToPath,this.pageWidget});
 }
 
 @immutable
-class PigeonRouteContext {
-  PigeonRoute route;
-  PigeonRouteSegment? segment;
+class PelicanRouteContext {
+  PelicanRoute route;
+  PelicanRouteSegment? segment;
 
-  PigeonRouteContext(this.route,this.segment);
+  PelicanRouteContext(this.route,this.segment);
 
-  PigeonRouteResult page(Widget pageWidget) {
-    return PigeonRouteResult(pageWidget: pageWidget);
+  PelicanRouteResult page(Widget pageWidget) {
+    return PelicanRouteResult(pageWidget: pageWidget);
   }
 
-  PigeonRouteResult redirect(String path) {
-    return PigeonRouteResult(redirectToPath: path);
+  PelicanRouteResult redirect(String path) {
+    return PelicanRouteResult(redirectToPath: path);
   }
 }
 
-typedef SegmentPageBuilder = Future<PigeonRouteResult> Function(PigeonRouteContext context);
-typedef PigeonRedirectBuilder = Future<String> Function(String string);
+typedef SegmentPageBuilder = Future<PelicanRouteResult> Function(PelicanRouteContext context);
+typedef PelicanRedirectBuilder = Future<String> Function(String string);
 
 @immutable
 class SegmentTableEntry {
   final SegmentPageBuilder builder;
-  final PigeonRouteSegment segment;
+  final PelicanRouteSegment segment;
   const SegmentTableEntry(this.segment,this.builder);
 }
 
 @immutable
 class RouteTable {
-  final Map<String, PigeonRedirectBuilder>? redirects;
+  final Map<String, PelicanRedirectBuilder>? redirects;
   late final List<SegmentTableEntry> segments;
 
   RouteTable(Map<String, SegmentPageBuilder> segments,{this.redirects}) {
     this.segments = segments.entries.map<SegmentTableEntry>((e) {
-      return SegmentTableEntry(PigeonRouteSegment.fromPathSegment(e.key),e.value);
+      return SegmentTableEntry(PelicanRouteSegment.fromPathSegment(e.key),e.value);
     }).toList();
   }
 
 
 
-  // Future<PigeonRouteResult> segmentNotFound(PigeonRouteContext context) async {
+  // Future<PelicanRouteResult> segmentNotFound(PelicanRouteContext context) async {
   //   if (_routeNotFound != null) {
   //     return await _routeNotFound(context.route!.toPath());
   //   } else {
-  //     return PigeonRouteResult(pageWidget: ErrorPage(text: "${context.path} doesn't exist"));
+  //     return PelicanRouteResult(pageWidget: ErrorPage(text: "${context.path} doesn't exist"));
   //   }
   // }
 
-  SegmentPageBuilder? matchRoute(PigeonRouteSegment segment) {
+  SegmentPageBuilder? matchRoute(PelicanRouteSegment segment) {
     for (var s in segments) {
       if (s.segment.name==segment.name)
         return s.builder;
@@ -66,16 +66,16 @@ class RouteTable {
     return null;
   }
 
-  Future<PigeonRouteResult> executeSegment(PigeonRouteContext context) async {
+  Future<PelicanRouteResult> executeSegment(PelicanRouteContext context) async {
     print("executeSegment ${context.segment!.toPathSegment()}");
     var builder = matchRoute(context.segment!);
     if (builder==null)
       throw Exception("Segment route not matched");
-    PigeonRouteResult buildResult = await builder(context);
+    PelicanRouteResult buildResult = await builder(context);
     return buildResult;
   }
 
-  PigeonRedirectBuilder? matchRedirect(String path) {
+  PelicanRedirectBuilder? matchRedirect(String path) {
     if (redirects!.containsKey(path))
       return redirects![path];
     else
@@ -96,26 +96,26 @@ class RouteTable {
   }
 }
 
-class PigeonRouteParser extends RouteInformationParser<PigeonRouterState> {
-  PigeonRouter router;
+class PelicanRouteParser extends RouteInformationParser<PelicanRouterState> {
+  PelicanRouter router;
 
-  PigeonRouteParser(this.router);
+  PelicanRouteParser(this.router);
 
-  // RouteInformation -> PigeonRoute
+  // RouteInformation -> PelicanRoute
   @override
-  Future<PigeonRouterState> parseRouteInformation(RouteInformation routeInformation) async {
-    print('parseRouteInformation RouteInformation -> PigeonRoute');
+  Future<PelicanRouterState> parseRouteInformation(RouteInformation routeInformation) async {
+    print('parseRouteInformation RouteInformation -> PelicanRoute');
     var path = await router.routeTable.executeRedirects(routeInformation.location!);
-    var route = PigeonRoute.fromPath(path);
-    return PigeonRouterState(
+    var route = PelicanRoute.fromPath(path);
+    return PelicanRouterState(
         route
     );
   }
 
-  // PigeonRoute -> RouteInformation
+  // PelicanRoute -> RouteInformation
   @override
-  RouteInformation? restoreRouteInformation(PigeonRouterState configuration) {
-    print('restoreRouteInformation PigeonRoute -> RouteInformation');
+  RouteInformation? restoreRouteInformation(PelicanRouterState configuration) {
+    print('restoreRouteInformation PelicanRoute -> RouteInformation');
     return RouteInformation(
       location: configuration.route.toPath(),
     );
@@ -123,23 +123,23 @@ class PigeonRouteParser extends RouteInformationParser<PigeonRouterState> {
 }
 
 
-class PigeonRouter extends RouterDelegate<PigeonRouterState> with ChangeNotifier, PopNavigatorRouterDelegateMixin<PigeonRouterState> {
+class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifier, PopNavigatorRouterDelegateMixin<PelicanRouterState> {
 
-  late final PigeonRouteParser parser;
-  late PigeonRouterState state;
+  late final PelicanRouteParser parser;
+  late PelicanRouterState state;
   late final RouteTable routeTable;
 
   @override
   late final GlobalKey<NavigatorState> navigatorKey;
 
-  PigeonRouter(
+  PelicanRouter(
       String initialPath,
       this.routeTable
       ): super() {
-    parser = PigeonRouteParser(this);
+    parser = PelicanRouteParser(this);
     navigatorKey = GlobalKey<NavigatorState>();
-    state = PigeonRouterState(
-        PigeonRoute.fromPath(initialPath)
+    state = PelicanRouterState(
+        PelicanRoute.fromPath(initialPath)
     );
     state.addListener(notifyListeners);
   }
@@ -151,12 +151,12 @@ class PigeonRouter extends RouterDelegate<PigeonRouterState> with ChangeNotifier
   }
 
   @override
-  PigeonRouterState get currentConfiguration {
+  PelicanRouterState get currentConfiguration {
     return state;
   }
 
   @override
-  Future<void> setNewRoutePath(PigeonRouterState configuration) async {
+  Future<void> setNewRoutePath(PelicanRouterState configuration) async {
     state.route = configuration.route;
   }
 
@@ -171,7 +171,7 @@ class PigeonRouter extends RouterDelegate<PigeonRouterState> with ChangeNotifier
     print('Router.buildPages');
     var pages = List<Page<dynamic>>.empty(growable: true);
     for (var segment in state.route.segments) {
-      var context = PigeonRouteContext(state.route,segment);
+      var context = PelicanRouteContext(state.route,segment);
       var buildResult = await routeTable.executeSegment(context);
       pages.add(_buildPage(segment.toPathSegment(),buildResult.pageWidget!));
     }

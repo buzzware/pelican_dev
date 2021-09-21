@@ -1,15 +1,15 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:pigeon_dev/TransitionDelegate.dart';
-import 'package:pigeon_dev/pigeon/PelicanRouteSegment.dart';
-import 'package:pigeon_dev/pigeon/PelicanRouter.dart';
-import 'package:pigeon_dev/models/Book.dart';
-import 'package:pigeon_dev/pages/BookDetailsPage.dart';
-import 'package:pigeon_dev/pages/BooksListScreen.dart';
+import 'package:pelican_dev/TransitionDelegate.dart';
+import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
+import 'package:pelican_dev/pelican/PelicanRouter.dart';
+import 'package:pelican_dev/models/Book.dart';
+import 'package:pelican_dev/pages/BookDetailsPage.dart';
+import 'package:pelican_dev/pages/BooksListScreen.dart';
 
 void main() {
-  const app = PigeonExampleApp();
+  const app = PelicanExampleApp();
   runApp(app);
 }
 
@@ -65,7 +65,7 @@ List<Book> books = [
 ];
 
 
-PigeonRouter router = PigeonRouter(
+PelicanRouter router = PelicanRouter(
   '/app/books',
   RouteTable(
     {
@@ -75,7 +75,7 @@ PigeonRouter router = PigeonRouter(
           BooksListScreen(
             books: books,
             onTapped: (book) {
-              router.state.push(PigeonRouteSegment.fromPathSegment("book;id=${book.id}"));
+              router.state.push(PelicanRouteSegment.fromPathSegment("book;id=${book.id}"));
             }
           )
         );
@@ -92,18 +92,18 @@ PigeonRouter router = PigeonRouter(
 );
 
 
-class PigeonExampleApp extends StatefulWidget {
-  const PigeonExampleApp({Key? key}) : super(key: key);
+class PelicanExampleApp extends StatefulWidget {
+  const PelicanExampleApp({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _PigeonExampleAppState();
+  State<StatefulWidget> createState() => _PelicanExampleAppState();
 }
 
-class _PigeonExampleAppState extends State<PigeonExampleApp> {
+class _PelicanExampleAppState extends State<PelicanExampleApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Pigeon Example App',
+      title: 'Pelican Example App',
       restorationScopeId: 'root',
       routerDelegate: router,
       routeInformationParser: router.parser,

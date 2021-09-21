@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pigeon_dev">
+    package="com.example.pelican_dev">
    <application
-        android:label="pigeon_dev"
+        android:label="pelican_dev"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name="com.example.pelican_dev.MainActivity"
