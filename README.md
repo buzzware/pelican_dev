@@ -1,6 +1,6 @@
-# Pelican the Navigator - another Flutter Router
+# Pelican - another Flutter Router
 
-Pelican Was a 15th century Portuguese prince, often credited with beginning the Age of Discovery, the period during which European nations expanded to Africa, Asia and the Americas.
+The Pelican is a large migratory bird https://en.wikipedia.org/wiki/Australian_pelican
 
 ## Why another Flutter router ?
 
