@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.henry_dev">
+    package="com.example.pigeon_dev">
    <application
-        android:label="henry_dev"
+        android:label="pigeon_dev"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name="com.example.pigeon_dev.MainActivity"
+            android:name="com.example.pelican_dev.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

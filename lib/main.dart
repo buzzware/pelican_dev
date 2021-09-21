@@ -1,15 +1,15 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:henry_dev/TransitionDelegate.dart';
-import 'package:henry_dev/henry/PigeonRouteSegment.dart';
-import 'package:henry_dev/henry/PigeonRouter.dart';
-import 'package:henry_dev/models/Book.dart';
-import 'package:henry_dev/pages/BookDetailsPage.dart';
-import 'package:henry_dev/pages/BooksListScreen.dart';
+import 'package:pigeon_dev/TransitionDelegate.dart';
+import 'package:pigeon_dev/pigeon/PelicanRouteSegment.dart';
+import 'package:pigeon_dev/pigeon/PelicanRouter.dart';
+import 'package:pigeon_dev/models/Book.dart';
+import 'package:pigeon_dev/pages/BookDetailsPage.dart';
+import 'package:pigeon_dev/pages/BooksListScreen.dart';
 
 void main() {
-  const app = HenryExampleApp();
+  const app = PigeonExampleApp();
   runApp(app);
 }
 
@@ -65,7 +65,7 @@ List<Book> books = [
 ];
 
 
-HenryRouter router = HenryRouter(
+PigeonRouter router = PigeonRouter(
   '/app/books',
   RouteTable(
     {
@@ -75,7 +75,7 @@ HenryRouter router = HenryRouter(
           BooksListScreen(
             books: books,
             onTapped: (book) {
-              router.state.push(HenryRouteSegment.fromPathSegment("book;id=${book.id}"));
+              router.state.push(PigeonRouteSegment.fromPathSegment("book;id=${book.id}"));
             }
           )
         );
@@ -92,18 +92,18 @@ HenryRouter router = HenryRouter(
 );
 
 
-class HenryExampleApp extends StatefulWidget {
-  const HenryExampleApp({Key? key}) : super(key: key);
+class PigeonExampleApp extends StatefulWidget {
+  const PigeonExampleApp({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _HenryExampleAppState();
+  State<StatefulWidget> createState() => _PigeonExampleAppState();
 }
 
-class _HenryExampleAppState extends State<HenryExampleApp> {
+class _PigeonExampleAppState extends State<PigeonExampleApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Henry Example App',
+      title: 'Pigeon Example App',
       restorationScopeId: 'root',
       routerDelegate: router,
       routeInformationParser: router.parser,

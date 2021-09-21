@@ -1,6 +1,6 @@
 {
-    "name": "henry_dev",
-    "short_name": "henry_dev",
+    "name": "pigeon_dev",
+    "short_name": "pigeon_dev",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

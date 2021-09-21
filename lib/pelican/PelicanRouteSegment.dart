@@ -3,12 +3,12 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 @immutable
-class HenryRouteSegment {
+class PigeonRouteSegment {
   late final String name;
   late final LinkedHashMap<String,String> params;
   late final LinkedHashMap<String,String> options;
 
-  HenryRouteSegment(this.name, this.params, this.options);
+  PigeonRouteSegment(this.name, this.params, this.options);
 
   static LinkedHashMap<String,String> mapFromValues(String values) {
     return LinkedHashMap<String,String>.fromIterable(values.isEmpty ? [] : values.split(';'),key: (i) => i.split('=')[0],value: (i) {
@@ -24,7 +24,7 @@ class HenryRouteSegment {
     return parts[0];
   }
 
-  HenryRouteSegment.fromPathSegment(String path) {
+  PigeonRouteSegment.fromPathSegment(String path) {
     var parts = path.split('&');
     var nameAndParams = parts[0];
     var optionsStr = parts.length > 1 ? parts[1] : '';
@@ -34,7 +34,7 @@ class HenryRouteSegment {
     options = mapFromValues(optionsStr);
   }
 
-  String toPathSegment({HenryRouteSegment? definition}) {
+  String toPathSegment({PigeonRouteSegment? definition}) {
     if (definition!=null && definition.name != name)
       throw Exception('definition name must match path name');
 

@@ -1,6 +1,6 @@
-# Henry the Navigator - another Flutter Router
+# Pigeon the Navigator - another Flutter Router
 
-Henry Was a 15th century Portuguese prince, often credited with beginning the Age of Discovery, the period during which European nations expanded to Africa, Asia and the Americas.
+Pigeon Was a 15th century Portuguese prince, often credited with beginning the Age of Discovery, the period during which European nations expanded to Africa, Asia and the Americas.
 
 ## Why another Flutter router ?
 

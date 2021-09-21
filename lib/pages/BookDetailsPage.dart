@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:henry_dev/main.dart';
-import 'package:henry_dev/models/Book.dart';
+import 'package:pigeon_dev/main.dart';
+import 'package:pigeon_dev/models/Book.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   final Book? book;
