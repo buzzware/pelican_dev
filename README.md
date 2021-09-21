@@ -1,16 +1,20 @@
-# henry_dev
+# Henry the Navigator - another Flutter Router
 
-A new Flutter project.
+Henry Was a 15th century Portuguese prince, often credited with beginning the Age of Discovery, the period during which European nations expanded to Africa, Asia and the Americas.
 
-## Getting Started
+## Why another Flutter router ?
 
-This project is a starting point for a Flutter application.
+I have spent a lot of time with routing in other app development environments, like Rails, Ember and Xamarin and researched Flutter packages and the Navigator 2.0 API.
+None of the available options met my core requirements, being :
 
-A few resources to get you started if this is your first Flutter project:
+* async everything
+* an expressive route table (of segments)
+* no code generation
+* parameters and options per segment
+* two-way serialization between the page stack and the route (like Rails and Ember.js)
+* defined segments, dynamically constructed route (of segments)
+* redirects
+* ability to goto any route, and intelligently create or destroy pages as required
+* a stack of pages, not a history of routes. Back = pop(), or you can goto any route you've stored.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+If you've written a popular Flutter routing package, go ahead and steal my ideas. I don't really want to be a package maintainer.
