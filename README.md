@@ -14,7 +14,8 @@ None of the available options met my core requirements, being :
 * two-way serialization between the page stack and the route (like Rails and Ember.js)
 * defined segments, dynamically constructed route (of segments)
 * no heirarchy in the definition of segments means segments/pages can be dynamically constructed in any order within a route/stack
-* redirects
+* full-route redirects
+* segment redirects ("aliases") - future feature
 * ability to goto any route, and intelligently create or destroy pages as required
 * a stack of pages, not a history of routes. Back = pop(), or you can goto any route you've stored.
 * uses Navigator 2.0 as it was intended
