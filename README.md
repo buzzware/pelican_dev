@@ -41,14 +41,28 @@ Acknowledgements
 Examples
 
 ```Book;id=1+color=red```
+
 ```Books```
+
 ```Books+search=hardy```
 
 * A route is zero or more segments, joined by /
 
 For example :
 
-/Home/Books+search=hardy/Book;id=1
+```/Home/Books+search=hardy```
+
+"search" is an option that allows values to be passed without affecting routing
+
+```/Home/Books+search=hardy/Settings```
+
+```/Home/Books+search=hardy/Book;id=1```
+
+"id" is a parameter that can affect routing
+
+```/Home/Books+search=hardy/Book;id=1/Settings```
+
+The "Settings" page can be shown anywhere on the stack, and even multiple times - we don't need to define routes for all possible stack routes
 
 ### RouteTable
 
