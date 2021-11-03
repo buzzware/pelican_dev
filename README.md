@@ -10,7 +10,7 @@ None of the available options met my core requirements, being :
 * async everything
 * an expressive route table (of segments)
 * no code generation
-* parameters and options per segment
+* parameters and options per segment. Parameters affect routing, options do not.
 * two-way serialization between the page stack and the route (like Rails and Ember.js)
 * defined segments, dynamically constructed route (of segments)
 * no heirarchy in the definition of segments means segments/pages can be dynamically constructed in any order within a route/stack
