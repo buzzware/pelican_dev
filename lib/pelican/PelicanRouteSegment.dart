@@ -72,8 +72,8 @@ class PelicanRouteSegment {
     return [name_and_pars.join(';'), ops.join(';')].where((s) => s.isNotEmpty).join('+');
   }
 
-  bool equals(PelicanRouteSegment other) {
-    return name == other.name && linkedMapsEqual(params,other.params);
+  bool equals(PelicanRouteSegment other, {bool ignoreOptions = true}) {
+    return name == other.name && linkedMapsEqual(params,other.params) && (ignoreOptions || linkedMapsEqual(options,other.options));
   }
 }
 

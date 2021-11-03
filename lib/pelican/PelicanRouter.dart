@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pelican_dev/TransitionDelegate.dart';
-import 'package:pelican_dev/pelican/PelicanRoute.dart';
-import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
-import 'package:pelican_dev/pelican/PelicanRouterState.dart';
+//import 'package:get_it/get_it.dart';
+
+import 'PelicanRoute.dart';
+import 'PelicanRouteSegment.dart';
+import 'PelicanRouterState.dart';
+import 'PelicanUtilities.dart';
+import 'TransitionDelegate.dart';
+
 
 class PelicanRouteResult {
   Widget? pageWidget;
@@ -13,8 +17,8 @@ class PelicanRouteResult {
 
 @immutable
 class PelicanRouteContext {
-  PelicanRoute route;
-  PelicanRouteSegment? segment;
+  final PelicanRoute route;
+  final PelicanRouteSegment? segment;
 
   PelicanRouteContext(this.route,this.segment);
 
@@ -142,9 +146,12 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
   List<Page>? _cachePages;
   PelicanRoute? _cacheRoute;
 
+  late final List<NavigatorObserver> observers;
+
   PelicanRouter(
       String initialPath,
-      this.routeTable
+      this.routeTable,
+      {this.observers = const []}
       ): super() {
     parser = PelicanRouteParser(this);
     navigatorKey = GlobalKey<NavigatorState>();
@@ -187,8 +194,8 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
     state.route = configuration.route;
   }
 
-  _buildPage(String key, Widget widget) {
-    return MaterialPage(
+  Page<dynamic> _buildPage(String key, Widget widget) {
+    return MaterialPage<dynamic>(
         key: ValueKey(key),
         child: widget
     );
@@ -209,14 +216,24 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
         print("Use cached ${_cacheRoute!.segments[i].toPathSegment()}");
       } else {
         useCached = false;
-        var context = PelicanRouteContext(state.route, segment);
-        var buildResult = await routeTable.executeSegment(context);
+        var prc = PelicanRouteContext(state.route, segment);
+        var buildResult = await routeTable.executeSegment(prc);
         print("build ${segment.toPathSegment()}");
         page = _buildPage(segment.toPathSegment(),buildResult.pageWidget!);
       }
       pages.add(page);
     }
+
     _cacheRoute = state.route;
+    var originalPages = _cachePages;
+    if (originalPages?.isNotEmpty ?? false) {
+      originalPages!.reversed.forEach((page) {
+        if (pages.contains(page))
+          return;
+        var widget = as<MaterialPage<dynamic>>(page)?.child;
+        //as<Disposable>(widget)?.onDispose();
+      });
+    }
     _cachePages = pages;
     return pages;
   }
@@ -236,7 +253,7 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
     return FutureBuilder(
       future: buildPages(context),
       initialData: [
-        MaterialPage(child: Container(
+        MaterialPage<dynamic>(child: Container(
           width: double.infinity,
           height: double.infinity,
           //child: Text('Please Wait')
@@ -250,12 +267,49 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
             key: navigatorKey,
             transitionDelegate: NoAnimationTransitionDelegate(),
             pages: snapshot.data! as List<Page<dynamic>>,
-            onPopPage: _onPopPage
+            onPopPage: _onPopPage,
+            observers: observers,
           );
         } else {
           return CircularProgressIndicator();
         }
       }
     );
+  }
+
+  void push(String segmentPath) {
+    state.push(segmentPath);
+  }
+
+  PelicanRouteSegment pop() {
+    return state.pop();
+  }
+
+  bool get canPop => state.route.segments.length>1;
+
+  Future<void> goto(String path) async {
+    var newPath = await routeTable.executeRedirects(path);
+    var route = PelicanRoute.fromPath(newPath);
+    if (route.equals(state.route))
+      return;
+    state.route = route;
+  }
+
+  void replace(String segmentPath) {
+    var route = state.route.popSegment();
+    route = route.pushSegment(PelicanRouteSegment.fromPathSegment(segmentPath));
+    state.route = route;
+  }
+
+  Page? getPage(String segmentName) {
+    for (var i=state.route.segments.length-1; i>=0; i--) {
+      if (_cacheRoute!.segments.length > i && _cacheRoute!.segments[i].name==segmentName)
+        return _cachePages![i];
+    }
+    return null;
+  }
+
+  Widget? getPageWidget(String segmentName) {
+    return (getPage(segmentName) as MaterialPage?)?.child;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
+
+import 'PelicanRouteSegment.dart';
 
 @immutable
 class PelicanRoute {
@@ -22,10 +23,6 @@ class PelicanRoute {
     _segments = List.unmodifiable(parts.map((p)=>PelicanRouteSegment.fromPathSegment(p)));
   }
 
-  bool equals(PelicanRoute route) {
-    return toPath()==route.toPath();
-  }
-
   // returns a new instance with the extra segment
   PelicanRoute pushSegment(PelicanRouteSegment segment) {
     return PelicanRoute(segments + [segment]);
@@ -38,4 +35,8 @@ class PelicanRoute {
     return PelicanRoute(segments.sublist(0,segments.length-1));
   }
 
+  bool equals(PelicanRoute other, {bool ignoreOptions = true}) {
+    var i = 0;
+    return segments.length==other.segments.length && segments.every((s) => s.equals(other.segments[i++],ignoreOptions: ignoreOptions));
+  }
 }

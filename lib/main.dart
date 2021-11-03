@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:pelican_dev/TransitionDelegate.dart';
+import 'package:pelican_dev/pelican/TransitionDelegate.dart';
 import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
 import 'package:pelican_dev/pelican/PelicanRouter.dart';
 import 'package:pelican_dev/models/Book.dart';

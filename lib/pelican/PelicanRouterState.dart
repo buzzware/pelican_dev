@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:pelican_dev/pelican/PelicanRoute.dart';
-import 'package:pelican_dev/pelican/PelicanRouteSegment.dart';
+
+import 'PelicanRoute.dart';
+import 'PelicanRouteSegment.dart';
 
 @immutable
 class PelicanRouterState with ChangeNotifier {
