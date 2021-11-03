@@ -13,6 +13,7 @@ None of the available options met my core requirements, being :
 * parameters and options per segment
 * two-way serialization between the page stack and the route (like Rails and Ember.js)
 * defined segments, dynamically constructed route (of segments)
+* no heirarchy in the definition of segments means segments/pages can be dynamically constructed in any order within a route/stack
 * redirects
 * ability to goto any route, and intelligently create or destroy pages as required
 * a stack of pages, not a history of routes. Back = pop(), or you can goto any route you've stored.
@@ -39,9 +40,9 @@ Acknowledgements
 
 Examples
 
-Book;id=1+color=red
-Books
-Books+search=hardy
+```Book;id=1+color=red```
+```Books```
+```Books+search=hardy```
 
 * A route is zero or more segments, joined by /
 
