@@ -21,7 +21,7 @@ None of the available options met my core requirements, being :
 
 If you've written a popular Flutter routing package, go ahead and steal my ideas. I don't really want to be a package maintainer.
 
-I make no claim of the completeness or quality of this repository, but I intend to use it in production, and develop it as required by the application.
+I make no claim of the completeness or quality of this repository, but I use it in production, and develop it as required by the application.
 This is not the latest version, but I intend to update it from my production app.
 Some intended features are not properly implemented yet.
 
