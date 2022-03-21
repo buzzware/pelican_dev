@@ -10,18 +10,19 @@ None of the available options met my core requirements, being :
 * async everything
 * an expressive route table (of segments)
 * no code generation
-* parameters and options per segment
+* parameters and options per segment. Parameters affect routing, options do not.
 * two-way serialization between the page stack and the route (like Rails and Ember.js)
 * defined segments, dynamically constructed route (of segments)
 * no heirarchy in the definition of segments means segments/pages can be dynamically constructed in any order within a route/stack
-* redirects
+* full-route redirects
+* segment redirects ("aliases") - future feature
 * ability to goto any route, and intelligently create or destroy pages as required
 * a stack of pages, not a history of routes. Back = pop(), or you can goto any route you've stored.
 * uses Navigator 2.0 as it was intended
 
 If you've written a popular Flutter routing package, go ahead and steal my ideas. I don't really want to be a package maintainer.
 
-I make no claim of the completeness or quality of this repository, but I intend to use it in production, and develop it as required by the application.
+I make no claim of the completeness or quality of this repository, but I use it in production, and develop it as required by the application.
 This is not the latest version, but I intend to update it from my production app.
 Some intended features are not properly implemented yet.
 
@@ -41,14 +42,28 @@ Acknowledgements
 Examples
 
 ```Book;id=1+color=red```
+
 ```Books```
+
 ```Books+search=hardy```
 
 * A route is zero or more segments, joined by /
 
 For example :
 
-/Home/Books+search=hardy/Book;id=1
+```/Home/Books+search=hardy```
+
+"search" is an option that allows values to be passed without affecting routing
+
+```/Home/Books+search=hardy/Settings```
+
+```/Home/Books+search=hardy/Book;id=1```
+
+"id" is a parameter that can affect routing
+
+```/Home/Books+search=hardy/Book;id=1/Settings```
+
+The "Settings" page can be shown anywhere on the stack, and even multiple times - we don't need to define routes for all possible stack routes
 
 ### RouteTable
 
