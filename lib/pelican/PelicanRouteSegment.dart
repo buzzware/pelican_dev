@@ -1,23 +1,45 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 
-bool linkedMapsEqual(LinkedHashMap<String, String> map1, LinkedHashMap<String, String> map2) {
-  return map1.length==map2.length && map1.entries.every((e) {
-    return map2.containsKey(e.key) && map2[e.key]==e.value;
-  });
+bool linkedMapsEqual(Map<String, String?> map1, Map<String, String?> map2) {
+  return map1.length==map2.length && (
+      map1.isEmpty || map1.entries.every((e) {
+        return map2.containsKey(e.key) && map2[e.key]==e.value;
+      })
+  );
 }
 
 @immutable
 class PelicanRouteSegment {
   late final String name;
-  late final LinkedHashMap<String,String> params;
-  late final LinkedHashMap<String,String> options;
+  late final Map<String,String?> params;
+  late final Map<String,String?> options;
 
-  PelicanRouteSegment(this.name, this.params, this.options);
+  PelicanRouteSegment(
+      this.name,
+      [
+      Map<String,String?>? params,
+      Map<String,String?>? options
+      ]
+  ) {
+    this.params = Map.unmodifiable(params ?? {});
+    this.options = Map.unmodifiable(options ?? {});
+  }
 
-  static LinkedHashMap<String,String> mapFromValues(String values) {
-    return LinkedHashMap<String,String>.fromIterable(values.isEmpty ? [] : values.split(';'),key: (i) => i.split('=')[0],value: (i) {
+  copyWith({
+    String? name,
+    Map<String,String?>? params,
+    Map<String,String?>? options
+  }) {
+    return PelicanRouteSegment(
+      name ?? this.name,
+      params ?? this.params,
+      options ?? this.options
+    );
+  }
+
+
+  static Map<String,String> mapFromValues(String values) {
+    return Map<String,String>.fromIterable(values.isEmpty ? [] : values.split(';'),key: (i) => i.split('=')[0],value: (i) {
     var parts = i.split('=');
     return parts.length>1 ? parts[1] : '';
     });
@@ -40,17 +62,17 @@ class PelicanRouteSegment {
     options = mapFromValues(optionsStr);
   }
 
-  String toPathSegment({PelicanRouteSegment? definition}) {
+  String toPath({PelicanRouteSegment? definition}) {
     if (definition!=null && definition.name != name)
       throw Exception('definition name must match path name');
 
-    var name_and_pars = [name];
+    var nameAndPars = [name];
     var ops = List<String>.empty(growable: true);
     if (definition!=null) {
       if (params.isNotEmpty) {
         for (var p in definition.params.keys) {
           if (params.containsKey(p)) {
-            name_and_pars.add([p, params[p]].join('='));
+            nameAndPars.add([p, params[p]].join('='));
           }
         }
       }
@@ -62,18 +84,21 @@ class PelicanRouteSegment {
         }
       }
     } else {
-      for (var p in params.keys) {
-        name_and_pars.add([p, params[p]].join('='));
+      List<String> keys = params.keys.toList()..sort((a, b) => a.compareTo(b));
+      for (var p in keys) {
+        nameAndPars.add([p, params[p]].join('='));
       }
-      for (var op in options.keys) {
+      keys = options.keys.toList()..sort((a, b) => a.compareTo(b));
+      for (var op in keys) {
         ops.add([op, options[op]].join('='));
       }
     }
-    return [name_and_pars.join(';'), ops.join(';')].where((s) => s.isNotEmpty).join('+');
+    return [nameAndPars.join(';'), ops.join(';')].where((s) => s.isNotEmpty).join('+');
   }
 
   bool equals(PelicanRouteSegment other, {bool ignoreOptions = true}) {
     return name == other.name && linkedMapsEqual(params,other.params) && (ignoreOptions || linkedMapsEqual(options,other.options));
   }
+
 }
 

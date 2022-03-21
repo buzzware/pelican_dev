@@ -32,7 +32,7 @@ class PelicanRouterState with ChangeNotifier {
       throw Exception("Can't pop when stack is empty");
     final poppedItem = _route.segments.isNotEmpty ? _route.segments.last : null;
     route = _route.popSegment();
-    print("pop ${poppedItem!.toPathSegment()}");
+    print("pop ${poppedItem!.toPath()}");
     notifyListeners();
     return poppedItem;
   }

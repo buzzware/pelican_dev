@@ -1,3 +1,4 @@
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/widgets.dart';
 
 import 'PelicanRouteSegment.dart';
@@ -11,7 +12,7 @@ class PelicanRoute {
   }
 
   String toPath() {
-    var parts = segments.map<String>((s) => s.toPathSegment()).join('/');
+    var parts = segments.map<String>((s) => s.toPath()).join('/');
     var result = "/$parts";
     return result;
   }

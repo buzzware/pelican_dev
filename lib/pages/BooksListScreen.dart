@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pelican_dev/AppRoutes.dart';
 import 'package:pelican_dev/main.dart';
 import 'package:pelican_dev/models/Book.dart';
 
@@ -14,7 +15,16 @@ class BooksListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              AppRoutes.router.push(AppRoutes.settings(vehicle_tab: 'Car',section_tab: 'Appearance'));
+            },
+          ),
+        ],
+      ),
       body: ListView(
         children: [
           for (var book in books)

@@ -1,3 +1,4 @@
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:get_it/get_it.dart';
@@ -67,7 +68,7 @@ class RouteTable {
   }
 
   Future<PelicanRouteResult> executeSegment(PelicanRouteContext context) async {
-    print("executeSegment ${context.segment!.toPathSegment()}");
+    print("executeSegment ${context.segment!.toPath()}");
     var builder = matchRoute(context.segment!);
     if (builder==null)
       throw Exception("Segment route not matched");
@@ -213,13 +214,13 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
       Page page;
       if (useCached && _cacheRoute!.segments.length>i && segment.equals(_cacheRoute!.segments[i])) {
         page = _cachePages![i];
-        print("Use cached ${_cacheRoute!.segments[i].toPathSegment()}");
+        print("Use cached ${_cacheRoute!.segments[i].toPath()}");
       } else {
         useCached = false;
         var prc = PelicanRouteContext(state.route, segment);
         var buildResult = await routeTable.executeSegment(prc);
-        print("build ${segment.toPathSegment()}");
-        page = _buildPage(segment.toPathSegment(),buildResult.pageWidget!);
+        print("build ${segment.toPath()}");
+        page = _buildPage(segment.toPath(),buildResult.pageWidget!);
       }
       pages.add(page);
     }
@@ -296,8 +297,12 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
   }
 
   void replace(String segmentPath) {
+    replaceSegment(PelicanRouteSegment.fromPathSegment(segmentPath));
+  }
+
+  void replaceSegment(PelicanRouteSegment segment) {
     var route = state.route.popSegment();
-    route = route.pushSegment(PelicanRouteSegment.fromPathSegment(segmentPath));
+    route = route.pushSegment(segment);
     state.route = route;
   }
 
@@ -311,5 +316,19 @@ class PelicanRouter extends RouterDelegate<PelicanRouterState> with ChangeNotifi
 
   Widget? getPageWidget(String segmentName) {
     return (getPage(segmentName) as MaterialPage?)?.child;
+  }
+
+  void replaceParam(String param, String? value) {
+    if (state.route.segments.isEmpty)
+      throw Exception("Can't replaceParam on an empty route");
+    var leaf = state.route.segments.last;
+    var params = leaf.params;
+    if (params[param]==value)
+      return;
+
+    params = Map.from(leaf.params);
+    params[param] = value;
+    var segment = leaf.copyWith(params: Map.unmodifiable(params));
+    replaceSegment(segment);
   }
 }
